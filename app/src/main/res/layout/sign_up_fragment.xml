@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.safacet.tradetracker.viewmodel.SignUpViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bodyBackground"
+        tools:context=".view.ui.SignUpFragment" >
+
+        <EditText
+            android:id="@+id/etEmailUp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:autofillHints="@string/email"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ibBack"
+            android:text="@={viewModel.email}"/>
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck"
+            android:onClick="@{(v) -> viewModel.onBackButtonClicked(v)}"/>
+
+        <EditText
+            android:id="@+id/etPassword1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:digits="0123456789qwertyuıopğüasdfghjklşizxcvbnmöçQWERTYUIOPĞÜASDFGHJKLŞİZXCVBNMÖÇ-_*!'+%&amp;/()=?.,"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:text="@={viewModel.password1}"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etEmailUp" />
+
+        <EditText
+            android:id="@+id/etPassword2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:digits="0123456789qwertyuıopğüasdfghjklşizxcvbnmöçQWERTYUIOPĞÜASDFGHJKLŞİZXCVBNMÖÇ-_*!'+%&amp;/()=?.,"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:text="@={viewModel.password2}"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etPassword1" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/error_red"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/etPassword2"
+            app:layout_constraintTop_toBottomOf="@+id/etPassword2"
+            android:displayText="@{viewModel.errorText}"/>
+
+        <Button
+            android:id="@+id/btnCreateAccount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="31dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/btn_background"
+            android:text="@string/signup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            android:onClick="@{(v)-> viewModel.onSignUpClicked(v)}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

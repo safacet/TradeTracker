@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.safacet.tradetracker.viewmodel.BuyViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bodyBackground"
+        tools:context=".view.ui.BuyFragment">
+
+        <ImageButton
+            android:id="@+id/ibBackFromBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="@string/title_home"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ibBackFromBuy"
+            app:layout_constraintStart_toEndOf="@+id/ibBackFromBuy"
+            app:layout_constraintTop_toTopOf="@+id/ibBackFromBuy" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tvFromUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/from_unit"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView3" />
+
+        <TextView
+            android:id="@+id/tvTuUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/to_unit"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <EditText
+            android:id="@+id/etFromUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:digits="QWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+            android:ems="10"
+            android:hint="@string/from_unit"
+            android:imeOptions="actionNext"
+            android:inputType="textCapCharacters"
+            android:lines="1"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:nextFocusForward="@+id/etToUnit"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFromUnit"
+            android:text="@={viewModel.fromUnit}"/>
+
+        <EditText
+            android:id="@+id/etToUnit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:digits="QWERTYUIOPASDFGHJKLZXCVBNM1234567890"
+            android:ems="10"
+            android:hint="@string/to_unit"
+            android:imeOptions="actionNext"
+            android:inputType="textCapCharacters"
+            android:lines="1"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:nextFocusForward="@+id/etFromAmount"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/tvTuUnit"
+            android:text="@={viewModel.toUnit}"/>
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/from_amount"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivFromAmount"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toEndOf="@+id/ivFromAmount"
+            app:layout_constraintTop_toBottomOf="@+id/etFromUnit" />
+
+        <ImageView
+            android:id="@+id/ivFromAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:src="@{viewModel.isFromChecked()? @drawable/ic_checked : @drawable/ic_unchecked}"
+            app:layout_constraintBottom_toBottomOf="@id/textView11"
+            app:layout_constraintEnd_toStartOf="@+id/textView11"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etFromUnit" />
+
+        <ImageView
+            android:id="@+id/ivToAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:src="@{viewModel.isFromChecked()? @drawable/ic_unchecked : @drawable/ic_checked}"
+            app:layout_constraintBottom_toBottomOf="@id/textView12"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/etToUnit" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/to_amount"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivToAmount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivToAmount"
+            app:layout_constraintTop_toBottomOf="@+id/etToUnit" />
+
+        <EditText
+            android:id="@+id/etFromAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="false"
+            android:ems="10"
+            android:hint="@string/from_amount"
+            android:imeOptions="actionNext"
+            android:inputType="numberSigned"
+            android:nextFocusForward="@+id/etCurrency"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView11"
+            app:onFocus="@{viewModel.isFromChecked}"
+            android:text="@={viewModel.fromAmount}"
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"/>
+
+        <EditText
+            android:id="@+id/etToAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:clickable="false"
+            android:ems="10"
+            android:hint="@string/to_amount"
+            android:imeOptions="actionNext"
+            android:inputType="numberSigned"
+            android:nextFocusForward="@+id/etCurrency"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/textView12"
+            app:onFocus="@{viewModel.isFromChecked}"
+            android:text="@={viewModel.toAmount}"
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"/>
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/currency"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etFromAmount" />
+
+        <EditText
+            android:id="@+id/etCurrency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/currency"
+            android:imeOptions="actionNext"
+            android:inputType="numberSigned"
+            android:nextFocusForward="@id/etCommission"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            android:text="@={viewModel.currency}"
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"/>
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/date"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/etToAmount" />
+
+        <EditText
+            android:id="@+id/etDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="date"
+            android:textColor="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toBottomOf="@+id/textView14"
+            android:onClick="@{(v) -> viewModel.onDateClick(v)}"
+            android:text="@={viewModel.date}"/>
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/commission"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etCurrency" />
+
+        <EditText
+            android:id="@+id/etCommission"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/commission"
+            android:imeOptions="actionDone"
+            android:inputType="numberSigned"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView15"
+            android:text="@={viewModel.commissionFee}"/>
+
+        <Button
+            android:id="@+id/btnBuy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/btn_background"
+            android:text="@string/buy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etCommission" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
