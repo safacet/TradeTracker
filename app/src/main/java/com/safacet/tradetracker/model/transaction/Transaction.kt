@@ -8,12 +8,12 @@ data class Transaction(
     val userEmail: String,
     val systemDate: Timestamp
 ) {
-    var commissionFee: Float? = null
-    var currency: Float = 0f
-    var fromAmount: Float = 0f
-    var fromUnit: String? = null
-    var profit: Float? = null
-    var toAmount: Float = 0f
-    var toUnit: String? = null
-
+    var commissionFee: String = ""
+    var currency: String = ""
+    var fromAmount: String = ""
+    var fromUnit: String = ""
+    var profit: Float = 0F
+    var toAmount: String = ""
+    var toUnit: String = ""
+    var tranDate= Timestamp(0)
 }

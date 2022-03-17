@@ -35,4 +35,7 @@
     <string name="currency">Currency:</string>
     <string name="date">Date:</string>
     <string name="commission">Commission:</string>
+    <string name="not_valid_number">All numbers should be valid!</string>
+    <string name="successful_transaction">Your transaction has been saved successfully</string>
+    <string name="db_error">Encountered an error while saving transaction data. Please try again.</string>
 </resources>

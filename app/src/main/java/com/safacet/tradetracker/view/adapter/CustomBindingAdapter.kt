@@ -46,14 +46,15 @@ class CustomBindingAdapter {
         @BindingAdapter("android:text")
         @JvmStatic
         fun setText(view: EditText, value: String?) {
-            if (view.text.toString() != value) {
+
+            if ((view.text.toString() != value)) {
                 view.setText(value)
                 view.setSelection(view.text.length)
             }
         }
 
         @InverseBindingAdapter(attribute = "android:text", event = "android:textAttrChanged")
-        @JvmStatic fun getText(view: EditText): String? {
+        @JvmStatic fun getText(view: EditText): String {
             return view.text.toString()
         }
 

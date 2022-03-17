@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.safacet.tradetracker.R
 import com.safacet.tradetracker.databinding.BuyFragmentBinding
 import com.safacet.tradetracker.viewmodel.BuyViewModel
@@ -25,11 +26,21 @@ class BuyFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        viewModel.toastMessage.observe(viewLifecycleOwner) {
+            if(!it.isNullOrEmpty()) {
+                showToastMessage(it)
+            }
+        }
+
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun showToastMessage(s: String) {
+        Toast.makeText(activity, s, Toast.LENGTH_SHORT).show()
     }
 }

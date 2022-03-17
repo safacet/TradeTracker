@@ -25,7 +25,8 @@
             android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+            tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck"
+            android:onClick="@{(v) -> viewModel.onBackBtnPressed(v)}" />
 
         <TextView
             android:id="@+id/textView3"
@@ -201,7 +202,7 @@
             app:layout_constraintTop_toBottomOf="@id/textView11"
             app:onFocus="@{viewModel.isFromChecked}"
             android:text="@={viewModel.fromAmount}"
-            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"/>
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}" />
 
         <EditText
             android:id="@+id/etToAmount"
@@ -224,7 +225,7 @@
             app:layout_constraintTop_toBottomOf="@id/textView12"
             app:onFocus="@{viewModel.isFromChecked}"
             android:text="@={viewModel.toAmount}"
-            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"/>
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}" />
 
         <TextView
             android:id="@+id/textView13"
@@ -259,7 +260,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13"
             android:text="@={viewModel.currency}"
-            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"/>
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}" />
 
         <TextView
             android:id="@+id/textView14"
@@ -339,7 +340,9 @@
             android:text="@string/buy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etCommission" />
+            app:layout_constraintTop_toBottomOf="@+id/etCommission"
+            android:onClick="@{(v)-> viewModel.onBuyBtnPressed(v)}"
+            android:clickable="@{viewModel.buyBtnClickable}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
