@@ -31,11 +31,11 @@ class BuyViewModel : ViewModel() {
     val toastMessage = MutableLiveData<String>(null)
     val buyBtnClickable = MutableLiveData<Boolean>(true)
 
-    private var timestampDate: Timestamp
+    private var timestampDate: Date
 
     init {
         date.value = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Calendar.getInstance().time)
-        timestampDate = Timestamp(System.currentTimeMillis())
+        timestampDate = Date(System.currentTimeMillis())
     }
 
     companion object {
@@ -82,7 +82,7 @@ class BuyViewModel : ViewModel() {
         val newDate = Calendar.getInstance()
         newDate.set(year, month, day)
         date.value = SimpleDateFormat(dateFormat, Locale.getDefault()).format(newDate.time)
-        timestampDate = Timestamp(newDate.timeInMillis)
+        timestampDate = Date(newDate.timeInMillis)
     }
 
     fun onBackBtnPressed( view: View ) {
@@ -125,11 +125,11 @@ class BuyViewModel : ViewModel() {
                 .whereEqualTo("toUnit", transaction.toUnit).get().addOnSuccessListener { documents ->
                     if(documents.isEmpty) {
                         val stock = Stock(
-                            currencyAverage = transaction.currency.toFloat(),
-                            fromAmountTotal = transaction.fromAmount.toFloat(),
+                            currencyAverage = transaction.currency.toDouble(),
+                            fromAmountTotal = transaction.fromAmount.toDouble(),
                             fromUnit = transaction.fromUnit,
                             systemDate = Timestamp(System.currentTimeMillis()),
-                            toAmountTotal = transaction.toAmount.toFloat(),
+                            toAmountTotal = transaction.toAmount.toDouble(),
                             toUnit = transaction.toUnit,
                             userEmail = userEmail
                         )

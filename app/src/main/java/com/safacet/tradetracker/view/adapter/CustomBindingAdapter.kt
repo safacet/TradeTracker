@@ -9,8 +9,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.RecyclerView
 import com.safacet.tradetracker.R
 import com.safacet.tradetracker.model.transaction.Transaction
+import com.safacet.tradetracker.viewmodel.ItemViewModel
 import java.util.function.Consumer
 
 class CustomBindingAdapter {
@@ -61,6 +63,22 @@ class CustomBindingAdapter {
         @BindingAdapter("app:dateClick")
         @JvmStatic fun onDateClicked(v: EditText, callback: (EditText) -> Any?) {
             callback(v)
+        }
+
+        @BindingAdapter("app:itemViewModel")
+        @JvmStatic fun bindItemViewModels(recyclerView: RecyclerView, itemViewModels: List<ItemViewModel>) {
+            val adapter = getOrCreateAdapter(recyclerView)
+            adapter.updateItems(itemViewModels)
+        }
+
+        private fun getOrCreateAdapter(recyclerView: RecyclerView): BindableRecyclerViewAdapter {
+            return if(recyclerView.adapter != null && recyclerView.adapter is BindableRecyclerViewAdapter)
+                recyclerView.adapter as BindableRecyclerViewAdapter
+            else {
+                val bindableRecyclerAdapter = BindableRecyclerViewAdapter()
+                recyclerView.adapter = bindableRecyclerAdapter
+                bindableRecyclerAdapter
+            }
         }
     }
 }

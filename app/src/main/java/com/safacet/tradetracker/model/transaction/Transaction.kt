@@ -12,8 +12,8 @@ data class Transaction(
     var currency: String = ""
     var fromAmount: String = ""
     var fromUnit: String = ""
-    var profit: Float = 0F
+    var profit: Double = 0.0
     var toAmount: String = ""
     var toUnit: String = ""
-    var tranDate= Timestamp(0)
+    var tranDate= Date(0)
 }
