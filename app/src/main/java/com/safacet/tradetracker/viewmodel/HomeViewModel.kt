@@ -1,19 +1,23 @@
 package com.safacet.tradetracker.viewmodel
 
+import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.TextView
 import androidx.core.os.HandlerCompat.postDelayed
 import androidx.databinding.BaseObservable
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import androidx.navigation.findNavController
+import com.google.android.material.tabs.TabItem
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.safacet.tradetracker.R
 import com.safacet.tradetracker.model.stock.Stock
+import com.safacet.tradetracker.model.transaction.Transaction
+import com.safacet.tradetracker.utils.STOCK_TAB_POSITION
 import com.safacet.tradetracker.view.ui.HomeFragmentDirections
 
 class HomeViewModel : ViewModel() {
@@ -24,14 +28,17 @@ class HomeViewModel : ViewModel() {
     var baseCurrencyBottom = MutableLiveData<String>().apply { value = "USD" }
     val data: LiveData<List<ItemViewModel>>
     get() = _data
+    val toastMessage = MutableLiveData<Int>()
+    val loadRecyclerViewData = MutableLiveData<Int>().apply { value = STOCK_TAB_POSITION }
 
     private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
 
     init {
-        loadData()
+        loadStockData()
     }
 
-    private fun loadData() {
+    fun loadStockData() {
+        _data.value = emptyList()
         val db = Firebase.firestore
         val userEmail = Firebase.auth.currentUser?.email.toString()
 
@@ -47,6 +54,31 @@ class HomeViewModel : ViewModel() {
                     }
                     _data.value = stockList
                 }
+            }.addOnFailureListener {
+                toastMessage.value = R.string.fetching_error
+            }
+    }
+
+    fun loadHistoryData() {
+        _data.value = emptyList()
+        val db = Firebase.firestore
+        val userEmail = Firebase.auth.currentUser?.email.toString()
+
+        db.collection("Transaction")
+            .whereEqualTo("userEmail", userEmail)
+            .orderBy("tranDate", Query.Direction.DESCENDING).get().addOnSuccessListener { documents ->
+                if(documents.isEmpty) {
+                    return@addOnSuccessListener
+                } else {
+                    val historyList: MutableList<ItemViewModel> = mutableListOf()
+                    for (document in documents) {
+                        val transaction : Transaction = document.toObject(Transaction::class.java)
+                        historyList.add(transaction.toHomeHistoryListItem())
+                    }
+                    _data.value = historyList
+                }
+            }.addOnFailureListener {
+                toastMessage.value = R.string.fetching_error
             }
     }
 

@@ -1,6 +1,7 @@
 package com.safacet.tradetracker.model.stock
 
 import com.google.firebase.firestore.PropertyName
+import com.google.firebase.firestore.Transaction
 import com.safacet.tradetracker.viewmodel.HomeStockListItem
 import java.sql.Timestamp
 import java.util.*
@@ -16,6 +17,6 @@ data class Stock (
         ) {
 
     fun toHomeStockListItem(): HomeStockListItem {
-        return HomeStockListItem(toUnit, toAmountTotal.toString(), fromAmountTotal.toString(), fromUnit, currencyAverage.toString())
+        return HomeStockListItem(toUnit, String.format("%.2f", toAmountTotal), String.format("%.2f", fromAmountTotal), fromUnit, String.format("%.2f", currencyAverage))
     }
 }

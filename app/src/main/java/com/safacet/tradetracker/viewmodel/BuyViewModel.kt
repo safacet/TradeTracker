@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import com.safacet.tradetracker.R
 import com.safacet.tradetracker.model.stock.Stock
 import com.safacet.tradetracker.model.transaction.Transaction
+import com.safacet.tradetracker.utils.dateFormat
 import java.lang.NumberFormatException
 import java.sql.Timestamp
 import java.text.DecimalFormat
@@ -38,9 +39,6 @@ class BuyViewModel : ViewModel() {
         timestampDate = Date(System.currentTimeMillis())
     }
 
-    companion object {
-        const val dateFormat = "dd MMM yyyy"
-    }
 
     fun afterTextChanged() {
         if(isFromChecked.value!!) {

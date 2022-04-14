@@ -241,14 +241,17 @@
         app:tabIndicatorColor="@color/indicatorBlue"
         app:tabIndicatorGravity="bottom"
         app:tabSelectedTextColor="@color/indicatorBlue"
-        app:tabTextColor="@color/topBarTextColor">
+        app:tabTextColor="@color/topBarTextColor"
+        app:selectedTab="@{viewModel.loadRecyclerViewData}">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tiStock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_invests" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tiHistory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/history" />
@@ -267,7 +270,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tlHomeTab"
         tools:ignore="SpeakableTextPresentCheck"
-        tools:listitem="@layout/recycler_view_item" />
+        tools:listitem="@layout/recycler_view_stock_item" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

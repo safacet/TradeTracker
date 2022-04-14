@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.safacet.tradetracker.BR
 import com.safacet.tradetracker.viewmodel.ItemViewModel
 
-class BindableRecyclerViewAdapter : RecyclerView.Adapter<BindableViewHolder>() {
+class BindableRecyclerViewAdapter : RecyclerView.Adapter<BindableRecyclerViewAdapter.BindableViewHolder>() {
 
     var itemViewModels: List<ItemViewModel> = emptyList()
     private val viewTypeToLayoutId: MutableMap<Int, Int> = mutableMapOf()
@@ -43,11 +43,12 @@ class BindableRecyclerViewAdapter : RecyclerView.Adapter<BindableViewHolder>() {
         itemViewModels = items ?: emptyList()
         notifyDataSetChanged()
     }
-}
 
-class BindableViewHolder(private  val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class BindableViewHolder(private  val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(itemViewModel: ItemViewModel) {
-        binding.setVariable(BR.itemViewModel, itemViewModel)
+        fun bind(itemViewModel: ItemViewModel) {
+            binding.setVariable(BR.itemViewModel, itemViewModel)
+        }
     }
 }
+
