@@ -202,7 +202,8 @@
             android:cropToPadding="false"
             android:minWidth="48dp"
             android:scaleType="fitStart"
-            android:src="@drawable/ic_remove" />
+            android:src="@drawable/ic_remove"
+            android:onClick="@{(v) -> viewModel.onMinusClicked(v)}"/>
 
         <TextView
             android:id="@+id/textView"
@@ -271,6 +272,25 @@
         app:layout_constraintTop_toBottomOf="@id/tlHomeTab"
         tools:ignore="SpeakableTextPresentCheck"
         tools:listitem="@layout/recycler_view_stock_item" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/tlHomeTab">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{viewModel.isLoading()? View.VISIBLE : View.GONE}"/>
+    </RelativeLayout>
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

@@ -30,6 +30,7 @@ class HomeViewModel : ViewModel() {
     get() = _data
     val toastMessage = MutableLiveData<Int>()
     val loadRecyclerViewData = MutableLiveData<Int>().apply { value = STOCK_TAB_POSITION }
+    val usersStocks = MutableLiveData<MutableList<Stock>>(mutableListOf())
 
     private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
 
@@ -39,6 +40,7 @@ class HomeViewModel : ViewModel() {
 
     fun loadStockData() {
         _data.value = emptyList()
+        isLoading.value = true
         val db = Firebase.firestore
         val userEmail = Firebase.auth.currentUser?.email.toString()
 
@@ -48,10 +50,13 @@ class HomeViewModel : ViewModel() {
                     return@addOnSuccessListener
                 } else {
                     val stockList : MutableList<ItemViewModel> = mutableListOf()
+                    usersStocks.value = mutableListOf()
                     for (document in documents) {
                         val stock : Stock = document.toObject(Stock::class.java)
+                        usersStocks.value?.add(stock)
                         stockList.add(stock.toHomeStockListItem())
                     }
+                    isLoading.value = false
                     _data.value = stockList
                 }
             }.addOnFailureListener {
@@ -61,6 +66,7 @@ class HomeViewModel : ViewModel() {
 
     fun loadHistoryData() {
         _data.value = emptyList()
+        isLoading.value = true
         val db = Firebase.firestore
         val userEmail = Firebase.auth.currentUser?.email.toString()
 
@@ -75,6 +81,7 @@ class HomeViewModel : ViewModel() {
                         val transaction : Transaction = document.toObject(Transaction::class.java)
                         historyList.add(transaction.toHomeHistoryListItem())
                     }
+                    isLoading.value = false
                     _data.value = historyList
                 }
             }.addOnFailureListener {
@@ -86,6 +93,12 @@ class HomeViewModel : ViewModel() {
     fun onPlusClicked(view: View) {
         val action = HomeFragmentDirections
             .actionNavigationHomeToBuyFragment()
+        view.findNavController().navigate(action)
+    }
+
+    fun onMinusClicked(view: View) {
+        val action = HomeFragmentDirections
+            .actionNavigationHomeToSellFragment()
         view.findNavController().navigate(action)
     }
 

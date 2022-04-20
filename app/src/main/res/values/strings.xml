@@ -41,4 +41,8 @@
     <string name="quantity">Quantity:</string>
     <string name="average_currency">Average Currency</string>
     <string name="fetching_error">Encountered an error while fetching data!</string>
+    <string name="select_asset">Select to Sell:</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="sell_from_to">%1$s Amount:</string>
 </resources>

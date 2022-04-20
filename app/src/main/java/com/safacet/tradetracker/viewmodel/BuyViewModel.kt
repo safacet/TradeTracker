@@ -2,10 +2,12 @@ package com.safacet.tradetracker.viewmodel
 
 import android.app.DatePickerDialog
 import android.view.View
+import android.widget.Button
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,6 +20,7 @@ import java.sql.Timestamp
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.HashMap
 
 class BuyViewModel : ViewModel() {
     private val currentUser = Firebase.auth.currentUser
@@ -30,7 +33,7 @@ class BuyViewModel : ViewModel() {
     val date = MutableLiveData<String?>(null)
     val isFromChecked = MutableLiveData(true)
     val toastMessage = MutableLiveData<String>(null)
-    val buyBtnClickable = MutableLiveData<Boolean>(true)
+    val buyBtnClickable = MutableLiveData(true)
 
     private var timestampDate: Date
 
@@ -83,23 +86,24 @@ class BuyViewModel : ViewModel() {
         timestampDate = Date(newDate.timeInMillis)
     }
 
-    fun onBackBtnPressed( view: View ) {
+    fun onBackBtnClicked( view: View ) {
         val navController = view.findNavController()
         navController.popBackStack()
     }
 
     fun onBuyBtnPressed(v: View) {
         buyBtnClickable.value = false
+        v.alpha = 0.5F
         val userEmail = currentUser!!.email.toString()
         val transaction =
-            Transaction("buy", userEmail, Timestamp(System.currentTimeMillis()))
+            Transaction("buy", userEmail, Date(System.currentTimeMillis()))
 
         try {
-            toAmount.value?.toFloat()
-            fromAmount.value?.toFloat()
-            currency.value?.toFloat()
+            toAmount.value?.toDouble()
+            fromAmount.value?.toDouble()
+            currency.value?.toDouble()
             if(!commissionFee.value.isNullOrEmpty()) {
-                commissionFee.value?.toFloat()
+                commissionFee.value?.toDouble()
             }
         } catch (e: NumberFormatException) {
             toastMessage.value = v.context.resources.getString(R.string.not_valid_number)
@@ -113,6 +117,7 @@ class BuyViewModel : ViewModel() {
         transaction.fromUnit = if(fromUnit.value.isNullOrEmpty()) "" else fromUnit.value!!
         transaction.toUnit = if(toUnit.value.isNullOrEmpty()) "" else toUnit.value!!
         transaction.tranDate = timestampDate
+        transaction.profit = if(commissionFee.value.isNullOrEmpty()) 0.0 else -commissionFee.value!!.toDouble()
 
         val db = Firebase.firestore
 
@@ -122,46 +127,47 @@ class BuyViewModel : ViewModel() {
                 .whereEqualTo("fromUnit", transaction.fromUnit)
                 .whereEqualTo("toUnit", transaction.toUnit).get().addOnSuccessListener { documents ->
                     if(documents.isEmpty) {
-                        val stock = Stock(
-                            currencyAverage = transaction.currency.toDouble(),
-                            fromAmountTotal = transaction.fromAmount.toDouble(),
-                            fromUnit = transaction.fromUnit,
-                            systemDate = Timestamp(System.currentTimeMillis()),
-                            toAmountTotal = transaction.toAmount.toDouble(),
-                            toUnit = transaction.toUnit,
-                            userEmail = userEmail
-                        )
+                        val stock = Stock(userEmail = userEmail)
+                        stock.onFirstBuy(transaction)
                         db.collection("Stock").document().set(stock).addOnSuccessListener {
                             toastMessage.value = v.context.resources.getString(R.string.successful_transaction)
-                            onBackBtnPressed(v)
+                            onBackBtnClicked(v)
                         }.addOnFailureListener {
                             toastMessage.value = v.context.resources.getString(R.string.db_error)
                             buyBtnClickable.value = true
+                            v.alpha = 1F
                         }
                     } else {
                         val document = documents.first()
                         val documentName = document.id
-                        val fromAmountTotal = (document.data["fromAmountTotal"] as Double).toFloat() + transaction.fromAmount.toFloat()
-                        val toAmountTotal = (document.data["toAmountTotal"] as Double).toFloat() + transaction.toAmount.toFloat()
-                        val currencyAverage = fromAmountTotal / toAmountTotal
-                        val data = hashMapOf(
-                            "currencyAverage" to currencyAverage,
-                            "fromAmountTotal" to fromAmountTotal,
-                            "toAmountTotal" to toAmountTotal
-                        )
+                        val data = calculateUpdatedStock(document, transaction)
                         db.collection("Stock").document(documentName)
                             .set(data, SetOptions.merge()).addOnSuccessListener {
                                 toastMessage.value = v.context.resources.getString(R.string.successful_transaction)
-                                onBackBtnPressed(v)
+                                onBackBtnClicked(v)
                             }.addOnFailureListener{
                                 toastMessage.value = v.context.resources.getString(R.string.db_error)
                                 buyBtnClickable.value = true
+                                v.alpha = 1F
                             }
                     }
                 }
         }.addOnFailureListener {
             toastMessage.value = v.context.resources.getString(R.string.db_error)
             buyBtnClickable.value = true
+            v.alpha = 1F
         }
+    }
+
+    private fun calculateUpdatedStock(document: QueryDocumentSnapshot, transaction: Transaction): HashMap<String, Double> {
+        val fromAmountTotal = (document.data["fromAmountTotal"] as Double) + transaction.fromAmount.toDouble()
+        val toAmountTotal = (document.data["toAmountTotal"] as Double) + transaction.toAmount.toDouble()
+        val currencyAverage = fromAmountTotal / toAmountTotal
+
+        return hashMapOf(
+            "currencyAverage" to currencyAverage,
+            "fromAmountTotal" to fromAmountTotal,
+            "toAmountTotal" to toAmountTotal
+        )
     }
 }

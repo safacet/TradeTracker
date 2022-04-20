@@ -14,6 +14,10 @@
             android:id="@+id/action_navigation_home_to_buyFragment"
             app:destination="@id/buyFragment"
             app:popUpTo="@id/navigation_home" />
+        <action
+            android:id="@+id/action_navigation_home_to_sellFragment"
+            app:destination="@id/sellFragment"
+            app:popUpTo="@id/navigation_home" />
     </fragment>
     <fragment
         android:id="@+id/navigation_profile"
@@ -30,5 +34,10 @@
         android:name="com.safacet.tradetracker.view.ui.BuyFragment"
         android:label="buy_fragment"
         tools:layout="@layout/buy_fragment" />
+    <fragment
+        android:id="@+id/sellFragment"
+        android:name="com.safacet.tradetracker.view.ui.SellFragment"
+        android:label="sell_fragment"
+        tools:layout="@layout/sell_fragment" />
 
 </navigation>

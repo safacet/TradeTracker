@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.safacet.tradetracker.viewmodel.SellViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bodyBackground"
+        tools:context=".view.ui.SellFragment">
+
+        <ImageButton
+            android:id="@+id/ibBackFromSell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@null"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck"
+            android:onClick="@{(v) -> viewModel.onBackBtnClicked(v)}"/>
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="@string/title_home"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ibBackFromSell"
+            app:layout_constraintStart_toEndOf="@+id/ibBackFromSell"
+            app:layout_constraintTop_toTopOf="@+id/ibBackFromSell" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_percent="0.5"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/select_asset"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+        <Spinner
+            android:id="@+id/sAssets"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView16"
+            app:spinnerAdapter="@{viewModel.spinnerArray}"
+            spinnerListener="@{viewModel.selectedSpinnerItem}"/>
+
+        <ImageView
+            android:id="@+id/ivSellFromCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@{viewModel.isFromChecked()? @drawable/ic_checked : @drawable/ic_unchecked}"
+            app:layout_constraintBottom_toBottomOf="@id/tvSellFromAmount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sAssets" />
+
+        <TextView
+            android:id="@+id/tvSellFromAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/sell_from_to"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSellFromCheck"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toEndOf="@+id/ivSellFromCheck"
+            app:layout_constraintTop_toBottomOf="@+id/sAssets"
+            app:sellPlaceHolder="@{viewModel.from}"/>
+
+        <ImageView
+            android:id="@+id/ivSellToCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:src="@{viewModel.isFromChecked()? @drawable/ic_unchecked : @drawable/ic_checked}"
+            app:layout_constraintBottom_toBottomOf="@id/tvSellToAmount"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/sAssets" />
+
+        <TextView
+            android:id="@+id/tvSellToAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/sell_from_to"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/ivSellToCheck"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivSellToCheck"
+            app:layout_constraintTop_toBottomOf="@id/sAssets"
+            app:sellPlaceHolder="@{viewModel.to}"/>
+
+        <EditText
+            android:id="@+id/etSellFromAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:clickable="false"
+            android:ems="10"
+            android:hint="@string/sell_from_to"
+            android:imeOptions="actionNext"
+            android:inputType="numberSigned"
+            android:nextFocusForward="@id/etSellCurrency"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSellFromAmount"
+            app:onFocus="@{viewModel.isFromChecked}"
+            android:text="@={viewModel.fromAmount}"
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"
+            app:sellPlaceHolder="@{viewModel.from}"/>
+
+        <EditText
+            android:id="@+id/etSellToAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:clickable="false"
+            android:ems="10"
+            android:hint="@string/sell_from_to"
+            android:imeOptions="actionNext"
+            android:inputType="numberSigned"
+            android:nextFocusForward="@id/etSellCurrency"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/tvSellToAmount"
+            app:onFocus="@{viewModel.isFromChecked}"
+            android:text="@={viewModel.toAmount}"
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"
+            app:sellPlaceHolder="@{viewModel.to}"/>
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/currency"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSellFromAmount" />
+
+        <TextView
+            android:id="@+id/textView21"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/date"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/etSellToAmount" />
+
+        <EditText
+            android:id="@+id/etSellCurrency"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/currency"
+            android:imeOptions="actionNext"
+            android:inputType="numberSigned"
+            android:nextFocusForward="@id/etSellCommission"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView20"
+            android:text="@={viewModel.currency}"
+            android:afterTextChanged="@{() -> viewModel.afterTextChanged()}"/>
+
+        <EditText
+            android:id="@+id/etSellDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:cursorVisible="false"
+            android:ems="10"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="date"
+            android:textColor="@color/topBarTextColor"
+            android:textSize="20sp"
+            android:text="@{viewModel.date}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/textView21"
+            android:onClick="@{(v) -> viewModel.onDateClick(v)}"/>
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/commission"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSellCurrency" />
+
+        <EditText
+            android:id="@+id/etSellCommission"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:ems="10"
+            android:hint="@string/commission"
+            android:inputType="numberSigned"
+            android:imeOptions="actionDone"
+            android:textColor="@color/white"
+            android:textColorHint="@color/topBarTextColor"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView17"
+            android:text="@={viewModel.commission}"/>
+
+        <Button
+            android:id="@+id/btnSell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/btn_background"
+            android:text="@string/sell"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etSellCommission"
+            android:clickable="@{viewModel.sellBtnClickable}"
+            android:onClick="@{(v) -> viewModel.onSellBtnClicked(v)}"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

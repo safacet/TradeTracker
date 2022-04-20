@@ -21,6 +21,8 @@ data class Transaction(
     @PropertyName("toUnit") var toUnit: String = ""
     @PropertyName("tranDate") var tranDate= Date(0)
 
+
+
     fun toHomeHistoryListItem(): HomeHistoryListItem {
         val date = SimpleDateFormat(dateFormat, Locale.getDefault()).format(tranDate)
         val isBuy = transactionType == "buy"
