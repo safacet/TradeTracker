@@ -225,7 +225,6 @@ class SellViewModel : ViewModel() {
     }
 
     private fun verifyInputs(): InputTypes {
-        var result: InputTypes? = null
         //Check for necessary fields filled
         if (
             (toAmount.value.isNullOrEmpty() &&
