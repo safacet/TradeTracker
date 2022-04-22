@@ -31,6 +31,7 @@ class HomeViewModel : ViewModel() {
     val toastMessage = MutableLiveData<Int>()
     val loadRecyclerViewData = MutableLiveData<Int>().apply { value = STOCK_TAB_POSITION }
     val usersStocks = MutableLiveData<MutableList<Stock>>(mutableListOf())
+    val overScrolled = MutableLiveData(false)
 
     private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
 
@@ -45,8 +46,11 @@ class HomeViewModel : ViewModel() {
         val userEmail = Firebase.auth.currentUser?.email.toString()
 
         db.collection("Stock")
-            .whereEqualTo("userEmail", userEmail).get().addOnSuccessListener { documents ->
+            .whereEqualTo("userEmail", userEmail)
+            .orderBy("systemDate", Query.Direction.DESCENDING).get().addOnSuccessListener { documents ->
                 if(documents.isEmpty) {
+                    isLoading.value = false
+                    toastMessage.value = R.string.no_data_on_listing
                     return@addOnSuccessListener
                 } else {
                     val stockList : MutableList<ItemViewModel> = mutableListOf()
@@ -74,6 +78,8 @@ class HomeViewModel : ViewModel() {
             .whereEqualTo("userEmail", userEmail)
             .orderBy("tranDate", Query.Direction.DESCENDING).get().addOnSuccessListener { documents ->
                 if(documents.isEmpty) {
+                    isLoading.value = false
+                    toastMessage.value = R.string.no_data_on_listing
                     return@addOnSuccessListener
                 } else {
                     val historyList: MutableList<ItemViewModel> = mutableListOf()

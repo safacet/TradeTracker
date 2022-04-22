@@ -10,8 +10,9 @@ import java.util.*
 data class Transaction(
     @PropertyName("transactionType") val transactionType: String = "",
     @PropertyName("userEmail") val userEmail: String = "",
-    @PropertyName("systemDate") val systemDate: Date = Date(0)
+
 ) {
+    @PropertyName("systemDate") val systemDate: Date = Date(System.currentTimeMillis())
     @PropertyName("commissionFee") var commissionFee: String = ""
     @PropertyName("currency") var currency: String = ""
     @PropertyName("fromAmount") var fromAmount: String = ""

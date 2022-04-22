@@ -45,4 +45,8 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="sell_from_to">%1$s Amount:</string>
+    <string name="no_data_on_listing">There is no record to list…</string>
+    <string name="blank_field_sell">You should fill at least one amount and currency fields</string>
+    <string name="number_format">All numbers should be valid!</string>
+    <string name="over_to_amount">You can\'t sell more than you have!</string>
 </resources>

@@ -20,7 +20,7 @@ data class Stock (
         currencyAverage = transaction.currency.toDouble()
         fromAmountTotal = transaction.fromAmount.toDouble()
         fromUnit = transaction.fromUnit
-        systemDate = Timestamp(System.currentTimeMillis())
+        systemDate = Date(System.currentTimeMillis())
         toAmountTotal = transaction.toAmount.toDouble()
         toUnit = transaction.toUnit
     }

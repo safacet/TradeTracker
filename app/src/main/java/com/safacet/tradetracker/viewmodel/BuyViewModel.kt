@@ -36,12 +36,13 @@ class BuyViewModel : ViewModel() {
     val buyBtnClickable = MutableLiveData(true)
 
     private var timestampDate: Date
+    private var stock: Stock
 
     init {
         date.value = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Calendar.getInstance().time)
         timestampDate = Date(System.currentTimeMillis())
+        stock = Stock(currentUser!!.email.toString())
     }
-
 
     fun afterTextChanged() {
         if(isFromChecked.value!!) {
@@ -49,9 +50,9 @@ class BuyViewModel : ViewModel() {
                 toAmount.value = ""
                 return
             }
-            val cur = currency.value!!.toFloatOrNull()
-            val from = fromAmount.value!!.toFloatOrNull()
-            if (cur == null || from == null || cur == 0f) {
+            val cur = currency.value!!.toDoubleOrNull()
+            val from = fromAmount.value!!.toDoubleOrNull()
+            if (cur == null || from == null || cur == 0.0) {
                 toAmount.value = ""
                 return
             }
@@ -61,8 +62,8 @@ class BuyViewModel : ViewModel() {
                 fromAmount.value = ""
                 return
             }
-            val cur = currency.value!!.toFloatOrNull()
-            val toVal = toAmount.value!!.toFloatOrNull()
+            val cur = currency.value!!.toDoubleOrNull()
+            val toVal = toAmount.value!!.toDoubleOrNull()
             if (cur == null || toVal == null) {
                 fromAmount.value = ""
                 return
@@ -96,7 +97,7 @@ class BuyViewModel : ViewModel() {
         v.alpha = 0.5F
         val userEmail = currentUser!!.email.toString()
         val transaction =
-            Transaction("buy", userEmail, Date(System.currentTimeMillis()))
+            Transaction("buy", userEmail)
 
         try {
             toAmount.value?.toDouble()
@@ -127,7 +128,6 @@ class BuyViewModel : ViewModel() {
                 .whereEqualTo("fromUnit", transaction.fromUnit)
                 .whereEqualTo("toUnit", transaction.toUnit).get().addOnSuccessListener { documents ->
                     if(documents.isEmpty) {
-                        val stock = Stock(userEmail = userEmail)
                         stock.onFirstBuy(transaction)
                         db.collection("Stock").document().set(stock).addOnSuccessListener {
                             toastMessage.value = v.context.resources.getString(R.string.successful_transaction)
@@ -159,15 +159,18 @@ class BuyViewModel : ViewModel() {
         }
     }
 
-    private fun calculateUpdatedStock(document: QueryDocumentSnapshot, transaction: Transaction): HashMap<String, Double> {
-        val fromAmountTotal = (document.data["fromAmountTotal"] as Double) + transaction.fromAmount.toDouble()
-        val toAmountTotal = (document.data["toAmountTotal"] as Double) + transaction.toAmount.toDouble()
+    private fun calculateUpdatedStock(document: QueryDocumentSnapshot, transaction: Transaction): HashMap<String, Any> {
+        stock = document.toObject(Stock::class.java)
+        val fromAmountTotal = stock.fromAmountTotal + transaction.fromAmount.toDouble()
+        val toAmountTotal = stock.toAmountTotal + transaction.toAmount.toDouble()
         val currencyAverage = fromAmountTotal / toAmountTotal
+        stock.systemDate = Date(System.currentTimeMillis())
 
         return hashMapOf(
             "currencyAverage" to currencyAverage,
             "fromAmountTotal" to fromAmountTotal,
-            "toAmountTotal" to toAmountTotal
+            "toAmountTotal" to toAmountTotal,
+            "systemDate" to stock.systemDate
         )
     }
 }

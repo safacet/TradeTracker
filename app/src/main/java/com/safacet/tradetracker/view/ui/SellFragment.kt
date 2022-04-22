@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import com.safacet.tradetracker.R
 import com.safacet.tradetracker.databinding.SellFragmentBinding
@@ -40,14 +41,22 @@ class SellFragment : Fragment() {
                 viewModel.onSpinnerItemSelected(it)
         }
 
+        viewModel.toastMessage.observe(viewLifecycleOwner) {
+            showToastMessage(it)
+        }
+
         return binding.root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-
-
+    private fun showToastMessage(id: Int?) {
+        if (id != null && id != 0) {
+            Toast.makeText(context, getString(id), Toast.LENGTH_SHORT).show()
+        }
+    }
 }

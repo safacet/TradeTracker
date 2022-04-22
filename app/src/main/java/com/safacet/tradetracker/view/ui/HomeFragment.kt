@@ -50,6 +50,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.loadRecyclerViewData.observe(viewLifecycleOwner) {
             if (it != null) {
+                binding.tlHomeTab.getTabAt(it)?.select()
                 loadData(it)
             }
         }
@@ -67,11 +68,6 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-        homeViewModel.loadRecyclerViewData.value?.let { loadData(it) }
     }
 
     private fun loadData(id: Int) {

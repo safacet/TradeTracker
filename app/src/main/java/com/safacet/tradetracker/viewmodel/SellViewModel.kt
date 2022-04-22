@@ -10,20 +10,23 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.safacet.tradetracker.R
 import com.safacet.tradetracker.model.stock.Stock
 import com.safacet.tradetracker.model.transaction.Transaction
+import com.safacet.tradetracker.utils.InputTypes
 import com.safacet.tradetracker.utils.dateFormat
 import java.lang.NumberFormatException
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.annotation.meta.When
 import kotlin.collections.HashMap
 
 class SellViewModel : ViewModel() {
     private val currentUser = Firebase.auth.currentUser
-    val isFromChecked = MutableLiveData(true)
+    val isFromChecked = MutableLiveData(false)
     val fromAmount = MutableLiveData<String>(null)
     val toAmount = MutableLiveData<String>(null)
     val currency = MutableLiveData<String>(null)
@@ -43,10 +46,13 @@ class SellViewModel : ViewModel() {
     val toastMessage = MutableLiveData(0)
 
     private var timestampDate: Date
+    private var stock: Stock
 
     init {
         date.value = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Calendar.getInstance().time)
         timestampDate = Date(System.currentTimeMillis())
+
+        stock = Stock(currentUser!!.email.toString())
     }
 
     fun processStocks() {
@@ -71,9 +77,11 @@ class SellViewModel : ViewModel() {
     fun onSpinnerItemSelected(position: Int) {
         if(usersStocks.value.isNullOrEmpty())
             return
+        isFromChecked.value = false
         val selectedStock = usersStocks.value!![position]
         from.value = selectedStock.fromUnit
         to.value = selectedStock.toUnit
+        toAmount.value = selectedStock.toAmountTotal.toString()
 
         ownedAmountOfTo = selectedStock.toAmountTotal
         boughtCurrency = selectedStock.currencyAverage
@@ -86,9 +94,9 @@ class SellViewModel : ViewModel() {
                 toAmount.value = ""
                 return
             }
-            val cur = currency.value!!.toFloatOrNull()
-            val from = fromAmount.value!!.toFloatOrNull()
-            if (cur == null || from == null || cur == 0f) {
+            val cur = currency.value!!.toDoubleOrNull()
+            val from = fromAmount.value!!.toDoubleOrNull()
+            if (cur == null || from == null || cur == 0.0) {
                 toAmount.value = ""
                 return
             }
@@ -98,8 +106,8 @@ class SellViewModel : ViewModel() {
                 fromAmount.value = ""
                 return
             }
-            val cur = currency.value!!.toFloatOrNull()
-            val toVal = toAmount.value!!.toFloatOrNull()
+            val cur = currency.value!!.toDoubleOrNull()
+            val toVal = toAmount.value!!.toDoubleOrNull()
             if (cur == null || toVal == null) {
                 fromAmount.value = ""
                 return
@@ -132,74 +140,115 @@ class SellViewModel : ViewModel() {
         sellBtnClickable.value = false
         v.alpha = 0.5F
 
-        val userEmail = Firebase.auth.currentUser!!.email.toString()
-        val transaction = Transaction("sell", userEmail, Date(System.currentTimeMillis()))
+        val userEmail = currentUser!!.email.toString()
+        val transaction = Transaction("sell", userEmail)
 
-        if(verifyInputs()) {
-            val commissionNumber = if(commission.value.isNullOrEmpty()) 0.0 else commission.value!!.toDouble()
-            transaction.toAmount = if(toAmount.value.isNullOrEmpty()) "" else toAmount.value!!
-            transaction.fromAmount = if(fromAmount.value.isNullOrEmpty()) "" else fromAmount.value!!
-            transaction.currency = if(currency.value.isNullOrEmpty()) "" else currency.value!!
-            transaction.commissionFee =if(commission.value.isNullOrEmpty()) "" else commission.value!!
-            transaction.toUnit = to.value.toString()
-            transaction.fromUnit = from.value.toString()
-            transaction.tranDate = timestampDate
-            transaction.profit =
-                ((currency.value!!.toDouble() - boughtCurrency) * toAmount.value!!.toDouble()) - commissionNumber
 
-            val db = Firebase.firestore
-            db.collection("Transaction").document().set(transaction).addOnSuccessListener {
-                db.collection("Stock")
-                    .whereEqualTo("userEmail", userEmail)
-                    .whereEqualTo("fromUnit", transaction.fromUnit)
-                    .whereEqualTo("toUnit", transaction.toUnit).get().addOnSuccessListener { documents ->
-                        if(!documents.isEmpty) {
-                            val document = documents.first()
-                            val documentName = document.id
-                            val data = calculateUpdatedStock(document, transaction)
+        when(verifyInputs()) {
+            InputTypes.OVER_TO_AMOUNT_ERROR -> {
+                toastMessage.value = R.string.over_to_amount
+            }
+            InputTypes.NUMBER_FORMAT_ERROR -> {
+                toastMessage.value = R.string.number_format
+            }
+            InputTypes.BLANKED_FIELD -> {
+                toastMessage.value = R.string.blank_field_sell
+            }
+
+            InputTypes.INPUT_CORRECT -> {
+                saveTransaction(v, transaction)
+            }
+        }
+        sellBtnClickable.value = true
+        v.alpha = 1F
+    }
+
+    private fun saveTransaction(v: View, transaction: Transaction) {
+        val commissionNumber = if(commission.value.isNullOrEmpty()) 0.0 else commission.value!!.toDouble()
+        transaction.toAmount = if(toAmount.value.isNullOrEmpty()) "" else toAmount.value!!
+        transaction.fromAmount = if(fromAmount.value.isNullOrEmpty()) "" else fromAmount.value!!
+        transaction.currency = if(currency.value.isNullOrEmpty()) "" else currency.value!!
+        transaction.commissionFee =if(commission.value.isNullOrEmpty()) "" else commission.value!!
+        transaction.toUnit = to.value.toString()
+        transaction.fromUnit = from.value.toString()
+        transaction.tranDate = timestampDate
+        transaction.profit =
+            ((currency.value!!.toDouble() - boughtCurrency) * toAmount.value!!.toDouble()) - commissionNumber
+
+        val db = Firebase.firestore
+        db.collection("Transaction").document().set(transaction).addOnSuccessListener {
+            db.collection("Stock")
+                .whereEqualTo("userEmail", transaction.userEmail)
+                .whereEqualTo("fromUnit", transaction.fromUnit)
+                .whereEqualTo("toUnit", transaction.toUnit).get().addOnSuccessListener { documents ->
+                    if(!documents.isEmpty) {
+                        val document = documents.first()
+                        val documentName = document.id
+                        val data = calculateUpdatedStock(document, transaction)
+                        if (stock.toAmountTotal != 0.0) {
                             db.collection("Stock").document(documentName)
                                 .set(data, SetOptions.merge()).addOnSuccessListener {
                                     toastMessage.value =R.string.successful_transaction
                                     onBackBtnClicked(v)
                                 }.addOnFailureListener{
                                     toastMessage.value = R.string.db_error
-                                    sellBtnClickable.value = true
-                                    v.alpha = 1F
+                                }
+                        } else {
+                            db.collection("Stock").document(documentName)
+                                .delete().addOnSuccessListener {
+                                    toastMessage.value =R.string.successful_transaction
+                                    onBackBtnClicked(v)
+                                }.addOnFailureListener {
+                                    toastMessage.value = R.string.db_error
                                 }
                         }
+
                     }
-            }.addOnFailureListener {
-                toastMessage.value = R.string.db_error
-                sellBtnClickable.value = true
-                v.alpha = 1F
-            }
+                }
+        }.addOnFailureListener {
+            toastMessage.value = R.string.db_error
         }
     }
 
-    private fun calculateUpdatedStock(document: QueryDocumentSnapshot, transaction: Transaction): HashMap<String, Double> {
-        val fromAmountTotal = (document.data["fromAmountTotal"] as Double) - transaction.fromAmount.toDouble()
-        val toAmountTotal = (document.data["toAmountTotal"] as Double) - transaction.toAmount.toDouble()
+
+    private fun calculateUpdatedStock(document: QueryDocumentSnapshot, transaction: Transaction): HashMap<String, Any> {
+        stock = document.toObject(Stock::class.java)
+        stock.toAmountTotal = stock.toAmountTotal - transaction.toAmount.toDouble()
+        stock.fromAmountTotal = stock.toAmountTotal * stock.currencyAverage
+        stock.systemDate = Date(System.currentTimeMillis())
 
         return hashMapOf(
-            "fromAmountTotal" to fromAmountTotal,
-            "toAmountTotal" to toAmountTotal
+            "fromAmountTotal" to stock.fromAmountTotal,
+            "toAmountTotal" to stock.toAmountTotal,
+            "systemDate" to stock.systemDate
         )
     }
 
-    private fun verifyInputs(): Boolean {
+    private fun verifyInputs(): InputTypes {
+        var result: InputTypes? = null
+        //Check for necessary fields filled
+        if (
+            (toAmount.value.isNullOrEmpty() &&
+            fromAmount.value.isNullOrEmpty()) ||
+            currency.value.isNullOrEmpty()
+        ) return InputTypes.BLANKED_FIELD
+
+        //Check for inputs are correct double numbers
         try {
-            toAmount.value?.toDouble()
-            fromAmount.value?.toDouble()
-            currency.value?.toDouble()
+            toAmount.value!!.toDouble()
+            fromAmount.value!!.toDouble()
+            currency.value!!.toDouble()
             if(!commission.value.isNullOrEmpty()) {
-                commission.value?.toDouble()
+                commission.value!!.toDouble()
             }
         } catch (e: NumberFormatException) {
-            return false
+            return InputTypes.NUMBER_FORMAT_ERROR
         }
+
+        //Check for user trying to sell more than they have
         if(toAmount.value?.toDouble()!! > ownedAmountOfTo) {
-            return false
+            return InputTypes.OVER_TO_AMOUNT_ERROR
         }
-        return  true
+        return InputTypes.INPUT_CORRECT
     }
 }
