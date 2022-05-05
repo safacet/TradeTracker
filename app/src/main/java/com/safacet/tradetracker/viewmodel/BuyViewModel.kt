@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import com.safacet.tradetracker.R
 import com.safacet.tradetracker.model.stock.Stock
 import com.safacet.tradetracker.model.transaction.Transaction
+import com.safacet.tradetracker.utils.SUPPORTED_SYMBOLS
 import com.safacet.tradetracker.utils.dateFormat
 import java.lang.NumberFormatException
 import java.sql.Timestamp
@@ -32,8 +33,9 @@ class BuyViewModel : ViewModel() {
     val toUnit = MutableLiveData<String?>(null)
     val date = MutableLiveData<String?>(null)
     val isFromChecked = MutableLiveData(true)
-    val toastMessage = MutableLiveData<String>(null)
+    val toastMessage = MutableLiveData<Int>(null)
     val buyBtnClickable = MutableLiveData(true)
+    val autoCompleteArray = MutableLiveData(arrayOf("---"))
 
     private var timestampDate: Date
     private var stock: Stock
@@ -42,6 +44,12 @@ class BuyViewModel : ViewModel() {
         date.value = SimpleDateFormat(dateFormat, Locale.getDefault()).format(Calendar.getInstance().time)
         timestampDate = Date(System.currentTimeMillis())
         stock = Stock(currentUser!!.email.toString())
+
+        val autoCompleteList= mutableListOf<String>()
+        SUPPORTED_SYMBOLS.map {
+            autoCompleteList.add(it.key)
+        }
+        autoCompleteArray.value = autoCompleteList.toTypedArray()
     }
 
     fun afterTextChanged() {
@@ -93,6 +101,15 @@ class BuyViewModel : ViewModel() {
     }
 
     fun onBuyBtnPressed(v: View) {
+        val toSymbol = SUPPORTED_SYMBOLS[toUnit.value]
+        val fromSymbol = SUPPORTED_SYMBOLS[fromUnit.value]
+        if(toSymbol.isNullOrEmpty() || fromSymbol.isNullOrEmpty()) {
+            toUnit.value = ""
+            fromUnit.value = ""
+            toastMessage.value = R.string.unsupported_symbol
+            return
+        }
+
         buyBtnClickable.value = false
         v.alpha = 0.5F
         val userEmail = currentUser!!.email.toString()
@@ -107,7 +124,7 @@ class BuyViewModel : ViewModel() {
                 commissionFee.value?.toDouble()
             }
         } catch (e: NumberFormatException) {
-            toastMessage.value = v.context.resources.getString(R.string.not_valid_number)
+            toastMessage.value = R.string.not_valid_number
             return
         }
 
@@ -115,8 +132,8 @@ class BuyViewModel : ViewModel() {
         transaction.fromAmount = if(fromAmount.value.isNullOrEmpty()) "" else fromAmount.value!!
         transaction.currency = if(currency.value.isNullOrEmpty()) "" else currency.value!!
         transaction.commissionFee =if(commissionFee.value.isNullOrEmpty()) "" else commissionFee.value!!
-        transaction.fromUnit = if(fromUnit.value.isNullOrEmpty()) "" else fromUnit.value!!
-        transaction.toUnit = if(toUnit.value.isNullOrEmpty()) "" else toUnit.value!!
+        transaction.fromUnit = fromSymbol
+        transaction.toUnit = toSymbol
         transaction.tranDate = timestampDate
         transaction.profit = if(commissionFee.value.isNullOrEmpty()) 0.0 else -commissionFee.value!!.toDouble()
 
@@ -130,10 +147,10 @@ class BuyViewModel : ViewModel() {
                     if(documents.isEmpty) {
                         stock.onFirstBuy(transaction)
                         db.collection("Stock").document().set(stock).addOnSuccessListener {
-                            toastMessage.value = v.context.resources.getString(R.string.successful_transaction)
+                            toastMessage.value = R.string.successful_transaction
                             onBackBtnClicked(v)
                         }.addOnFailureListener {
-                            toastMessage.value = v.context.resources.getString(R.string.db_error)
+                            toastMessage.value = R.string.db_error
                             buyBtnClickable.value = true
                             v.alpha = 1F
                         }
@@ -143,17 +160,17 @@ class BuyViewModel : ViewModel() {
                         val data = calculateUpdatedStock(document, transaction)
                         db.collection("Stock").document(documentName)
                             .set(data, SetOptions.merge()).addOnSuccessListener {
-                                toastMessage.value = v.context.resources.getString(R.string.successful_transaction)
+                                toastMessage.value = R.string.successful_transaction
                                 onBackBtnClicked(v)
                             }.addOnFailureListener{
-                                toastMessage.value = v.context.resources.getString(R.string.db_error)
+                                toastMessage.value = R.string.db_error
                                 buyBtnClickable.value = true
                                 v.alpha = 1F
                             }
                     }
                 }
         }.addOnFailureListener {
-            toastMessage.value = v.context.resources.getString(R.string.db_error)
+            toastMessage.value = R.string.db_error
             buyBtnClickable.value = true
             v.alpha = 1F
         }

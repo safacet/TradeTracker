@@ -42,6 +42,19 @@ class HomeFragment : Fragment() {
         binding.viewModel = homeViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        dealObservables()
+
+        return binding.root
+    }
+
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun dealObservables() {
         homeViewModel.toastMessage.observe(viewLifecycleOwner) {
             if (it != null) {
                 showToastMessage(it)
@@ -60,14 +73,12 @@ class HomeFragment : Fragment() {
                 model.stocks.value = it
             }
         }
-        return binding.root
-    }
 
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        homeViewModel.currentCurrencies.observe(viewLifecycleOwner) {
+            if(it != null) {
+                homeViewModel.loadStockData()
+            }
+        }
     }
 
     private fun loadData(id: Int) {

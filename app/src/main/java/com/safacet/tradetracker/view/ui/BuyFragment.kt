@@ -27,7 +27,7 @@ class BuyFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.toastMessage.observe(viewLifecycleOwner) {
-            if(!it.isNullOrEmpty()) {
+            if(it!= null) {
                 showToastMessage(it)
             }
         }
@@ -40,7 +40,7 @@ class BuyFragment : Fragment() {
         _binding = null
     }
 
-    private fun showToastMessage(s: String) {
-        Toast.makeText(activity, s, Toast.LENGTH_SHORT).show()
+    private fun showToastMessage(s: Int) {
+        Toast.makeText(activity, resources.getString(s), Toast.LENGTH_SHORT).show()
     }
 }

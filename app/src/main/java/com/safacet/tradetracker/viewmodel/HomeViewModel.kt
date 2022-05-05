@@ -11,6 +11,7 @@ import androidx.lifecycle.*
 import androidx.navigation.findNavController
 import com.google.android.material.tabs.TabItem
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -19,6 +20,7 @@ import com.safacet.tradetracker.model.stock.Stock
 import com.safacet.tradetracker.model.transaction.Transaction
 import com.safacet.tradetracker.utils.STOCK_TAB_POSITION
 import com.safacet.tradetracker.view.ui.HomeFragmentDirections
+import org.json.JSONObject
 
 class HomeViewModel : ViewModel() {
 
@@ -31,20 +33,33 @@ class HomeViewModel : ViewModel() {
     val toastMessage = MutableLiveData<Int>()
     val loadRecyclerViewData = MutableLiveData<Int>().apply { value = STOCK_TAB_POSITION }
     val usersStocks = MutableLiveData<MutableList<Stock>>(mutableListOf())
-    val overScrolled = MutableLiveData(false)
+    var currentCurrencies = MutableLiveData(mapOf<String, Double>())
 
     private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
 
     init {
-        loadStockData()
+        loadInitialData()
     }
 
-    fun loadStockData() {
+    private fun loadInitialData() {
         _data.value = emptyList()
         isLoading.value = true
         val db = Firebase.firestore
-        val userEmail = Firebase.auth.currentUser?.email.toString()
 
+        db.collection("rates")
+            .document("latest").get().addOnSuccessListener { document ->
+                if (document.exists()) {
+                    currentCurrencies.value = document.data as Map<String, Double>
+                }
+            }
+    }
+
+    fun loadStockData() {
+        if(currentCurrencies.value.isNullOrEmpty()) {
+            return
+        }
+        val db = Firebase.firestore
+        val userEmail = Firebase.auth.currentUser?.email.toString()
         db.collection("Stock")
             .whereEqualTo("userEmail", userEmail)
             .orderBy("systemDate", Query.Direction.DESCENDING).get().addOnSuccessListener { documents ->
@@ -58,7 +73,7 @@ class HomeViewModel : ViewModel() {
                     for (document in documents) {
                         val stock : Stock = document.toObject(Stock::class.java)
                         usersStocks.value?.add(stock)
-                        stockList.add(stock.toHomeStockListItem())
+                        stockList.add(stock.toHomeStockListItem(currentCurrencies.value!!))
                     }
                     isLoading.value = false
                     _data.value = stockList
@@ -67,6 +82,7 @@ class HomeViewModel : ViewModel() {
                 toastMessage.value = R.string.fetching_error
             }
     }
+
 
     fun loadHistoryData() {
         _data.value = emptyList()

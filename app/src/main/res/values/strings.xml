@@ -49,4 +49,7 @@
     <string name="blank_field_sell">You should fill at least one amount and currency fields</string>
     <string name="number_format">All numbers should be valid!</string>
     <string name="over_to_amount">You can\'t sell more than you have!</string>
+    <string name="unsupported_symbol">Unsupported symbol! Please select from dropdown list.</string>
+    <string name="current_p_l">Current P/L:</string>
+    <string name="percentage">%1$s\%%</string>
 </resources>

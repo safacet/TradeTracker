@@ -1,5 +1,6 @@
 package com.safacet.tradetracker.view.adapter
 
+import android.annotation.SuppressLint
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -127,6 +128,23 @@ class CustomBindingAdapter {
                 }
 
             }
+        }
+
+        @BindingAdapter("app:autoCompleteAdapter")
+        @JvmStatic fun autoCompleteAdapter(editText: AutoCompleteTextView, itemArray: Array<String>) {
+            val ad = ArrayAdapter(editText.context, android.R.layout.simple_dropdown_item_1line, itemArray)
+            editText.setAdapter(ad)
+        }
+
+        @SuppressLint("StringFormatInvalid")
+        @BindingAdapter("app:percentagePlaceHolder")
+        @JvmStatic fun percentagePlaceHolder(textView: TextView, percentage: Double) {
+            textView.text = textView.context.getString(R.string.percentage, String.format("%.2f", percentage))
+            if (percentage < 0)
+                textView.setTextColor(textView.context.getColor(R.color.lossRed))
+            else
+                textView.setTextColor(textView.context.getColor(R.color.profitGreen))
+
         }
     }
 }

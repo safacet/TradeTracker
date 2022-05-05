@@ -56,7 +56,7 @@
                     android:id="@+id/tvTotalValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="10.357,48"
+                    tools:text="10.357,48"
                     android:textColor="@color/profitGreen"
                     android:textSize="45sp" />
             </LinearLayout>
@@ -146,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="5.478,22"
+                    tools:text="5.478,22"
                     android:textColor="@color/profitGreen"
                     android:textSize="35sp" />
             </LinearLayout>
@@ -172,7 +172,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:text="17.546,28"
+                    tools:text="17.546,28"
                     android:textColor="@color/profitGreen"
                     android:textSize="35sp" />
             </LinearLayout>

@@ -25,7 +25,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/tvHistoryDate"
         app:layout_constraintStart_toStartOf="@id/tvHistoryDate"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="USD"/>
 
     <TextView
         android:id="@+id/tvHistoryToAmount"
@@ -38,7 +39,8 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="567.0"/>
 
     <TextView
         android:id="@+id/tvHistoryCurrency"
@@ -51,7 +53,8 @@
         android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="14.67"/>
 
     <TextView
         android:id="@+id/tvHistoryDate"
@@ -63,7 +66,8 @@
         android:textColor="@color/topBarTextColor"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvHistoryToName" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHistoryToName"
+        tools:text="14 Apr 2022"/>
 
     <ImageView
         android:id="@+id/ivBuySell"
@@ -73,7 +77,8 @@
         app:layout_constraintEnd_toStartOf="@id/tvBuySell"
         app:layout_constraintStart_toStartOf="@+id/tvHistoryToAmount"
         app:layout_constraintTop_toTopOf="@+id/tvBuySell"
-        app:isBuy="@{itemViewModel.isBuy}" />
+        app:isBuy="@{itemViewModel.isBuy}"
+        tools:src="@drawable/ic_arrow_downward"/>
 
     <TextView
         android:id="@+id/tvBuySell"
@@ -86,6 +91,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/tvHistoryToAmount"
         app:layout_constraintStart_toEndOf="@+id/ivBuySell"
-        app:layout_constraintTop_toBottomOf="@+id/tvHistoryToAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHistoryToAmount"
+        tools:text="Sell"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

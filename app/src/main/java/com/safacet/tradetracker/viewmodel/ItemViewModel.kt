@@ -17,10 +17,12 @@ class HomeStockListItem(
     val toQuantity: String,
     val fromAmount: String,
     val fromName: String,
-    val currency: String
+    val currency: String,
+    val pNLPercentage: Double
 ): ItemViewModel {
     override val layoutId: Int = R.layout.recycler_view_stock_item
     override val viewType: Int = HOME_STOCK_VIEW_TYPE
+
 }
 
 class HomeHistoryListItem(

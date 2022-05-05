@@ -78,7 +78,7 @@
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/etFromUnit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -101,9 +101,10 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvFromUnit"
-            android:text="@={viewModel.fromUnit}"/>
+            android:text="@={viewModel.fromUnit}"
+            app:autoCompleteAdapter="@{viewModel.autoCompleteArray}"/>
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/etToUnit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -126,7 +127,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/tvTuUnit"
-            android:text="@={viewModel.toUnit}"/>
+            android:text="@={viewModel.toUnit}"
+            app:autoCompleteAdapter="@{viewModel.autoCompleteArray}"/>
 
         <TextView
             android:id="@+id/textView11"

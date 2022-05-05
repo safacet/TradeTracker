@@ -48,7 +48,8 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="USD"/>
 
             <TextView
                 android:id="@+id/textView8"
@@ -72,11 +73,12 @@
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="345.21"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clBottom"
+            android:id="@+id/clBody"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -96,7 +98,8 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="5872.15"/>
 
             <TextView
                 android:id="@+id/tvFromName"
@@ -108,7 +111,8 @@
                 android:textColor="@color/topBarTextColor"
                 app:layout_constraintEnd_toEndOf="@+id/tvFromAmountList"
                 app:layout_constraintStart_toStartOf="@+id/tvFromAmountList"
-                app:layout_constraintTop_toBottomOf="@+id/tvFromAmountList" />
+                app:layout_constraintTop_toBottomOf="@+id/tvFromAmountList"
+                tools:text="TRY" />
 
             <TextView
                 android:id="@+id/tvCurrencyList"
@@ -120,7 +124,8 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/textView19"
                 app:layout_constraintStart_toStartOf="@+id/textView19"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="14.57"/>
 
             <TextView
                 android:id="@+id/textView19"
@@ -133,6 +138,56 @@
                 android:textColor="@color/topBarTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvCurrencyList" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clBottom"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/list_item_layout_shape"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/clBody">
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/current_p_l"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/topBarTextColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline4"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_percent="0.49076518"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tvPNLOnStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline4"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="67%"
+                app:percentagePlaceHolder="@{itemViewModel.PNLPercentage}"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

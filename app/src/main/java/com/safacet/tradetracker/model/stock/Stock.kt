@@ -2,7 +2,9 @@ package com.safacet.tradetracker.model.stock
 
 import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.Transaction
+import com.safacet.tradetracker.utils.SUPPORTED_SYMBOLS
 import com.safacet.tradetracker.viewmodel.HomeStockListItem
+import org.json.JSONObject
 import java.sql.Timestamp
 import java.util.*
 
@@ -25,7 +27,19 @@ data class Stock (
         toUnit = transaction.toUnit
     }
 
-    fun toHomeStockListItem(): HomeStockListItem {
-        return HomeStockListItem(toUnit, String.format("%.2f", toAmountTotal), String.format("%.2f", fromAmountTotal), fromUnit, String.format("%.2f", currencyAverage))
+    fun toHomeStockListItem(currencies: Map<String, Double>): HomeStockListItem {
+        return HomeStockListItem(
+            toUnit,
+            String.format("%.2f", toAmountTotal),
+            String.format("%.2f", fromAmountTotal),
+            fromUnit,
+            String.format("%.2f", currencyAverage),
+            calculatePNL(currencies)
+        )
+    }
+
+    private fun calculatePNL(currencies: Map<String, Double>): Double {
+        val cur = currencies[fromUnit]!! / currencies[toUnit]!!
+        return ((cur - currencyAverage) / currencyAverage) * 100
     }
 }
