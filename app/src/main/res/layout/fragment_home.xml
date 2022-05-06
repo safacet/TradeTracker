@@ -57,8 +57,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:text="10.357,48"
-                    android:textColor="@color/profitGreen"
-                    android:textSize="45sp" />
+                    android:textColor="@{viewModel.isTotalValProfit() ? @color/profitGreen : @color/lossRed}"
+                    android:textSize="45sp"
+                    android:text="@{viewModel.totalValue}"/>
             </LinearLayout>
 
             <ImageView
@@ -147,8 +148,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     tools:text="5.478,22"
-                    android:textColor="@color/profitGreen"
-                    android:textSize="35sp" />
+                    android:textColor="@{viewModel.isPotentialPNLProfit() ? @color/profitGreen : @color/lossRed}"
+                    android:textSize="35sp"
+                    android:text="@{viewModel.potentialPNL}"/>
             </LinearLayout>
 
             <LinearLayout
@@ -173,8 +175,9 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     tools:text="17.546,28"
-                    android:textColor="@color/profitGreen"
-                    android:textSize="35sp" />
+                    android:textColor="@{viewModel.isRealPNLProfil() ? @color/profitGreen : @color/lossRed}"
+                    android:textSize="35sp"
+                    android:text="@{viewModel.realPNL}"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

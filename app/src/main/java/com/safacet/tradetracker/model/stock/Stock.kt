@@ -38,7 +38,7 @@ data class Stock (
         )
     }
 
-    private fun calculatePNL(currencies: Map<String, Double>): Double {
+    fun calculatePNL(currencies: Map<String, Double>): Double {
         val cur = currencies[fromUnit]!! / currencies[toUnit]!!
         return ((cur - currencyAverage) / currencyAverage) * 100
     }

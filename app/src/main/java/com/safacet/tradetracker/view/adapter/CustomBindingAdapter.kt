@@ -6,6 +6,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
@@ -72,7 +73,7 @@ class CustomBindingAdapter {
         @BindingAdapter("app:isBuy")
         @JvmStatic fun setImageAsset(imageView: ImageView, isBuy: Boolean) {
             if (isBuy)
-                imageView.setImageDrawable(imageView.context.getDrawable(R.drawable.ic_arrow_downward))
+                imageView.setImageDrawable(imageView.context.resources.getDrawable(R.drawable.ic_arrow_downward))
             else
                 imageView.setImageDrawable(imageView.context.getDrawable(R.drawable.ic_arrow_upward))
         }
